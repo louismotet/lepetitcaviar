@@ -284,8 +284,12 @@
 
   /* ============== Concept / Histoire ============== */
   #concept{background:var(--cream);padding:0;border-top:1px solid var(--hairline)}
-  .concept-split{display:grid;grid-template-columns:1fr 1fr;min-height:88vh}
-  @media (max-width:980px){.concept-split{grid-template-columns:1fr}}
+  .concept-split{display:flex;justify-content:center;min-height:0}
+  .concept-split .concept-text{justify-content:center;text-align:center;padding:140px 40px}
+  .concept-split .concept-text-inner{max-width:680px}
+  .founders-names{display:flex;justify-content:center;gap:64px;margin-top:40px;flex-wrap:wrap}
+  .founders-names .name{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--ink);margin:0}
+  .founders-names .role{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-top:6px}
   .concept-photos{display:grid;grid-template-rows:1fr 1fr;gap:8px;background:var(--cream-warm);min-height:88vh}
   @media (max-width:980px){.concept-photos{min-height:auto;grid-template-rows:auto auto;grid-template-columns:1fr 1fr;gap:6px}}
   .founder-photo{position:relative;background:repeating-linear-gradient(135deg,rgba(184,145,90,.06) 0 8px,rgba(184,145,90,.14) 8px 9px),var(--cream-warm);overflow:hidden}
@@ -637,23 +641,6 @@
 <!-- ============== CONCEPT — fondateurs ============== -->
 <section id="concept">
   <div class="concept-split">
-    <div class="concept-photos">
-      <div class="founder-photo">
-        <div class="meta">
-          <p class="name">Louis</p>
-          <div class="role" data-i18n="s8.role1">Co-fondateur · Maurice</div>
-        </div>
-        <div class="tag">[ portrait · 3:4 ]</div>
-      </div>
-      <div class="founder-photo">
-        <div class="meta">
-          <p class="name">Julien David</p>
-          <div class="role" data-i18n="s8.role2">Co-fondateur · Canada</div>
-        </div>
-        <div class="tag">[ portrait · 3:4 ]</div>
-      </div>
-    </div>
-
     <div class="concept-text">
       <div class="concept-text-inner reveal">
         <span class="eyebrow"><span class="rule-gold"></span> &nbsp; <span data-i18n="s8.eyebrow">VII · Notre histoire</span></span>
@@ -663,6 +650,10 @@
           <p>Le Petit Caviar est porté par deux associés&nbsp;: un Mauricien, un Canadien.</p>
           <p>Le premier connaît l'île dans ses moindres détails&nbsp;: ses lieux, ses codes, les attentes de ceux qui célèbrent ici leurs plus beaux moments. Le second apporte la rigueur événementielle des grandes métropoles.</p>
           <p>De cette rencontre naît une signature singulière, faite pour Maurice.</p>
+        </div>
+        <div class="founders-names">
+          <div><p class="name">Louis</p><div class="role" data-i18n="s8.role1">Co-fondateur · Maurice</div></div>
+          <div><p class="name">Julien David</p><div class="role" data-i18n="s8.role2">Co-fondateur · Canada</div></div>
         </div>
         <div class="signature" data-i18n="s8.sig">— Le Petit Caviar, Maurice.</div>
       </div>
