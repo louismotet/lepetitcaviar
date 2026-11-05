@@ -366,7 +366,7 @@
       <div class="hero-rule"></div>
       <div class="hero-butler" data-i18n-html="hero.butler">
         <p>L'un des caviars les plus rares au monde, servi parmi vos invités lors de vos cocktails et événements privés.</p>
-        <p><em>À partir de 750&nbsp;Rs par personne.</em></p>
+        <p><em>À partir de 850&nbsp;Rs par personne.</em></p>
       </div>
     </div>
   </div>
@@ -601,8 +601,8 @@
       <div class="field">
         <label class="field-label" for="paxInput" data-i18n="s7.lbl.pax">Nombre d'invités</label>
         <div class="pax-control">
-          <input id="paxRange" type="range" min="10" max="400" step="1" value="80" aria-label="Slider invités" />
-          <input id="paxInput" class="pax-input" type="number" min="10" max="400" step="1" value="80" inputmode="numeric" aria-label="Saisir invités" />
+          <input id="paxRange" type="range" min="20" max="400" step="1" value="80" aria-label="Slider invités" />
+          <input id="paxInput" class="pax-input" type="number" min="20" max="400" step="1" value="80" inputmode="numeric" aria-label="Saisir invités" />
         </div>
       </div>
     </div>
@@ -712,7 +712,7 @@ window.I18N = {
     "nav.concept":    "À propos",
 
     "hero.tag":     "L'art de recevoir.<span class=\"sub\">Expériences privées et événements d'exception, à Maurice.</span>",
-    "hero.butler":  "<p>L'un des caviars les plus rares au monde, servi parmi vos invités lors de vos cocktails et événements privés.</p><p><em>À partir de 750\u00a0Rs par personne.</em></p>",
+    "hero.butler":  "<p>L'un des caviars les plus rares au monde, servi parmi vos invités lors de vos cocktails et événements privés.</p><p><em>À partir de 850\u00a0Rs par personne.</em></p>",
     "hero.scroll":  "Descendre",
 
     "s2.eyebrow": "I · L'origine",
@@ -834,7 +834,7 @@ window.I18N = {
     "nav.concept":    "About",
 
     "hero.tag":     "A taste of quiet luxury.<span class=\"sub\">Private experiences and exceptional events in Mauritius.</span>",
-    "hero.butler":  "<p>One of the world's rarest caviars, served among your guests during cocktails and private events.</p><p><em>From 750\u00a0Rs per guest.</em></p>",
+    "hero.butler":  "<p>One of the world's rarest caviars, served among your guests during cocktails and private events.</p><p><em>From 850\u00a0Rs per guest.</em></p>",
     "hero.scroll":  "Scroll",
 
     "s2.eyebrow": "I · The origin",
@@ -1066,24 +1066,21 @@ const i18n = (function(){
 
 /* ---------- 5) Devis calculator ---------- */
 (function devis(){
-  /* Price bands — per guest, Rs. We use the band ONE STEP HIGHER than the
-     guest-count band (i.e. the "non-negotiated" rate one tier above) per
-     request "le prix par personne juste avant". The smallest band (lt50)
-     stays at its own rate since there is nothing above it. */
+  /* Public prices per guest (Rs) — "Grille tarifaire" sheet. Include caviar, blinis, ice & travel. */
   const grid = {
     baerii: {
-      eclat:    { lt50: 950,  lt100: 850,  lt200: 750,  gt200: 700  },
-      prestige: { lt50: 1100, lt100: 1000, lt200: 850,  gt200: 800  },
-      imperial: { lt50: 1800, lt100: 1500, lt200: 1300, gt200: 1200 },
+      eclat:    { b50: 1100, b100: 1000, b150: 900,  b200: 900,  b250: 850  },
+      prestige: { b50: 1250, b100: 1200, b150: 1100, b200: 1100, b250: 1000 },
+      imperial: { b50: 1850, b100: 1850, b150: 1700, b200: 1750, b250: 1650 },
     },
     oscietre: {
-      eclat:    { lt50: 1425, lt100: 1275, lt200: 1125, gt200: 1050 },
-      prestige: { lt50: 1650, lt100: 1500, lt200: 1275, gt200: 1200 },
-      imperial: { lt50: 2700, lt100: 2250, lt200: 1950, gt200: 1800 },
+      eclat:    { b50: 1500, b100: 1300, b150: 1200, b200: 1200, b250: 1100 },
+      prestige: { b50: 1750, b100: 1550, b150: 1400, b200: 1450, b250: 1350 },
+      imperial: { b50: 2600, b100: 2400, b150: 2250, b200: 2300, b250: 2150 },
     }
   };
   /* Currency rates: 1 [cur] = X MUR */
-  const RATES = { EUR: 54.9, GBP: 65, USD: 47 };
+  const RATES = { EUR: 53.69, GBP: 65, USD: 47 };
   const SYM   = { EUR: '€',   GBP: '£', USD: '$' };
 
   const state = { caviar: 'baerii', formula: 'prestige', pax: 80, currency: 'EUR' };
@@ -1110,17 +1107,12 @@ const i18n = (function(){
     footMail.textContent = addr;
   }
 
-  /* Use the price tier "just before" the negotiated one:
-     lt50 → lt50 (highest tier, no shift)
-     lt100 → lt50
-     lt200 → lt100
-     gt200 → lt200
-  */
   function paxBand(p) {
-    if (p < 50)   return 'lt50';
-    if (p < 100)  return 'lt50';
-    if (p < 200)  return 'lt100';
-    return 'lt200';
+    if (p <= 50)  return 'b50';
+    if (p <= 100) return 'b100';
+    if (p <= 150) return 'b150';
+    if (p <= 200) return 'b200';
+    return 'b250';
   }
 
   function fmt(n) {
@@ -1151,9 +1143,7 @@ const i18n = (function(){
 
   function compute() {
     const unit = grid[state.caviar][state.formula][paxBand(state.pax)];
-    /* Transport flat fee added to per-person rate (offered above 100 pax) */
-    const transport = state.pax < 100 ? 2000 : 0;
-    const perPerson = unit + (transport / state.pax);
+    const perPerson = unit;
     const rate = RATES[state.currency];
     const perAlt = perPerson / rate;
 
@@ -1232,7 +1222,7 @@ const i18n = (function(){
   })();
 
   function setPax(n, source) {
-    n = Math.max(10, Math.min(400, Math.round(n || 0)));
+    n = Math.max(20, Math.min(400, Math.round(n || 0)));
     state.pax = n;
     if (source !== 'range') paxRange.value = n;
     if (source !== 'input') paxInput.value = n;
